@@ -86,6 +86,8 @@ prod n m
     | n < m     = n * prod (n+1) m
     | otherwise = error "Has posat els nombres al revés"
 
+--EJERCICIO10
+
 
 
 
