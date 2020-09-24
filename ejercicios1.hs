@@ -88,6 +88,27 @@ prod n m
 
 --EJERCICIO10
 
+--EJERCICIO11
+(|-|)::Bool->Bool->Bool
+(|-|) a b
+   | a == b    = False
+   | otherwise = True
+   
+--EJERCICIO12
+
+--EJERCICIO13
+hms::Int->(Int, Int, Int)
+hms x = (div x 3600, div x 60, x - (div x 3600)*3600 - (div x 60)*60) -- els segons no funcionen.
+
+--EJERCICIO14
+triangulo::(Int, Int, Int)->String
+triangulo (x, y, z)
+    | x<=y && y<=z                = error "no es un triangle"
+    | x==y && y==z           = "Escaleno"
+    | x==y || x==z || y==z   = "Isosceles"
+    | otherwise              = "Nada lmao"
+
+--EJERCICIO15
 
 
 
