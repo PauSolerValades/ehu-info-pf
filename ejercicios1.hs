@@ -104,6 +104,8 @@ prod n m
    | otherwise = True
    
 --EJERCICIO12
+tresIgual:: (Eq a) => a->a->a->Bool
+tresIgual x y z = if x == y && y == z then True else False
 
 --EJERCICIO13
 hms::Int->(Int, Int, Int)

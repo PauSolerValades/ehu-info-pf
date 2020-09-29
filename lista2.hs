@@ -43,13 +43,44 @@ quitarRep' (x:xs) = x : quitarRep' (quitarTodos x xs)
 
 --Ejercicio 3
 dif:: (Eq a) => [a] -> [a] -> [a]
-dif xs [] = []
-dif xs (y:ys) = (quitaUno y xs):ys
+dif xs [] = xs
+dif xs (y:ys) = dif (quitaUno y xs) ys
 
 --Ejercicio 4
 perm:: (Eq a) => [a] -> [a] -> Bool
 perm xs ys = (dif xs ys == []) && (dif ys xs == [])
 
+--Ejercico 5
+--Si compares llistes necessites el Eq(a)
+sonpermde1:: (Eq a) => [[a]] -> [[a]]
+sonpermde1 [] = [] --això és la llista que no conté cap llista.
+sonpermde1 (x:xs) = x:sonperm x xs
+                    where 
+                    sonperm:: (Eq a) => [a] -> [[a]] -> [[a]]
+                    sonperm y [] = []
+                    sonperm y (z:zs) = if perm z y then z: sonperm y zs else sonperm y zs
 
- 
+sonpermde2::(Eq a) => [[a]] -> [[a]]
+sonpermde2 [] = []
+sonpermde2 (x:xs) = x:filter (perm x) xs
+
+--Ejercicio 6
+timesTen [] = []
+timesTen (x:xs)
+        | xs /= []      = x*10^(length xs):timesTen xs
+        | xs == []      = x:xs
+
+aDecimal'::[Int]->Int
+aDecimal' xs = foldr (+) 0 (timesTen xs)
+
+aDecmial:: [Int]->Int
+aDecimal xs = foldl g 0 xs
+                where 
+                g x y = 10*x + y
+
+
+aDigit 0 = []
+aDigit x = aDigit (x `div` 10) ++ [x `mod` 10]
+
+
 
