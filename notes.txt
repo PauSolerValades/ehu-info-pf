@@ -1,0 +1,4 @@
+take n [list]: agafa n elements d'una llista.
+drop n [list]: agafa els n últims elements d'una llista
+
+takeWhile i dropWhile fan el mateix però amb una condició.

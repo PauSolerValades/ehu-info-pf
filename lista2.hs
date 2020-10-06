@@ -73,14 +73,32 @@ timesTen (x:xs)
 aDecimal'::[Int]->Int
 aDecimal' xs = foldr (+) 0 (timesTen xs)
 
-aDecmial:: [Int]->Int
-aDecimal xs = foldl g 0 xs
-                where 
-                g x y = 10*x + y
+--aDecmial::[Int]->Int
+--aDecimal xs = foldl g 0 xs
+                --where 
+                --g x y = 10*x + y
 
 
 aDigit 0 = []
 aDigit x = aDigit (x `div` 10) ++ [x `mod` 10]
+
+aDigitos::Int->[Int]
+aDigitos n
+        | 0 <= n && n <= 9 = [n] --caso simple
+        | otherwise = aDigitos (n `div` 10) ++ [n `mod` 10]
+
+--Ejercicio 9 takeWhile dropWhile:
+    
+palabras:: String->[String]
+
+palabras s = if s' == "" then []
+             else (tomarPal1 s' : palabras (saltarPal1 s'))
+             where
+             s' = saltarBlancos s
+             saltarBlancos = dropWhile (== ' ')
+             tomarPal1 = takeWhile (/= ' ')
+             saltarPal1 = dropWhile (/= ' ')
+
 
 
 
