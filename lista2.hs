@@ -89,8 +89,9 @@ aDigitos n
 
 --Ejercicio 9 takeWhile dropWhile:
     
-palabras:: String->[String]
+{-en aquesta es fan dos recorreguts de la mateixa llista, un per take i un per drop-}
 
+palabras:: String->[String]
 palabras s = if s' == "" then []
              else (tomarPal1 s' : palabras (saltarPal1 s'))
              where
@@ -98,6 +99,12 @@ palabras s = if s' == "" then []
              saltarBlancos = dropWhile (== ' ')
              tomarPal1 = takeWhile (/= ' ')
              saltarPal1 = dropWhile (/= ' ')
+
+{-en aquest no passa, ja que span només fa una passada. Posem el patró de la tupla per capturar una cosa en el primer element i un altre al segon. amb w i s'' conectarem tot lo altre. Això és l'exemple de com unir les llistes amb l'string i la recursió-}        
+listPal s = case dropWhile isSpace s of
+    "" -> []
+    s' -> w : palabras s''
+        where (w,s'') = break isSpace s' --span !isSpace s' == takeWhile isSpace s', dropWhile !isSpace
 
 
 
