@@ -35,5 +35,58 @@ happyFreq = [(x,c) | x<- ['a'..'z'], let c = (length.filter (== x)) "happy", c>0
 --Agrupar [(p,1)(p,1),(y,1)...]
 -- Sumar [(p,3),(y,1)]
 
+--EJERCICIO PROPUESTO: define letterFreq, que devuelve una lista de tuplas (letra, num) que cuente cuantas veces aparece cada char en una frase
+listConst :: [Char] -> [[(Char, Int)]]
+listConst xs = map (:[]) (sort (zip xs [1,1.. length xs -1]))
+
 letterFreq :: [Char] -> [(Char, Int)]
-letterFreq xs = sort (zip xs [1,1.. length xs -1])
+letterFreq str = tupleAdd(concatLists(listConst (str)))
+
+letterFreqComp str = (tupleAdd . (concatLists . listConst)) str
+
+tupleAdd:: [[(Char, Int)]]->[(Char,Int)]
+tupleAdd [[]] = []
+tupleAdd (x:xs)
+   | xs == [] = (x!!0):(tupleAdd [[]])
+   | otherwise = (foldl (\(x,y) (z,t)->(z,y+t)) (' ',0) x):(tupleAdd xs)
+
+concatLists:: (Eq a) => [[a]] -> [[a]]
+concatLists [] = []
+concatLists (x:xs)
+    | xs == []               = x:concatLists []
+    | (head xs)!!0 == x!!0   = concatLists((x++head xs):(tail xs))
+    | (head xs)!!0 /= x!!0   = x:(concatLists xs)
+    | otherwise      = concatLists []
+    
+
+letterFreqClasse:: String -> [(Char, Int)]
+letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
+                       where agrupar = sort
+                             sumar = foldr op []
+                             op :: (Char, Int) -> [(Char, Int)] -> [(Char, Int)]
+                             op (c, x) [] = (c,x):[] --[(c,x)] també val
+                             op (c, x) ((d, y):resto) = 
+                                 if (c==d) 
+                                 then (c,x+y):resto 
+                                 else (c,x):(((d, y):resto))
+--op = \(c,x) ps -> if c == (fst.head) ps 
+--then (c,c+(snd.head)ps):(tail ps)
+--else (c,x):ps
+                                 
+-- EJERCICIO PROPUESTO: que solo saque letras, ni signos de exclamacion ni espacios
+-- EJERCICIO PROPUESTO 2: cuente mayúsculas y minúsculas iguales.
+
+--EJERCICIO PERMUTACIONES DE LA LISTA 1: hacer todas las permutaciones de una lista dada.
+
+         
+-- EJERCICIO: usar span para recorrer xs una sola vez
+
+--9
+--set +s dice el tiempo que tarda en computar
+
+triadsxLTyLTz n = [(x,y,z) | x <- [1..n], y <- [x..n], z <- [y+1..n], x^2 + y^2 == z^2]
+triadsThr n = [(x,y,z) | x <- [1..n], y <- [x..n], z <- [y+1..n], mod x 2 /= 1 || mod y 2 /=1, x^2 + y^2 == z^2]
+
+--EJERCICIO PROPUESTO: Un número es perfecto si es igual a la suma de todos sus divisores excepto el mismo. Dissenyar una funcion que obtenga, dado un n, todos los numeros perfectos menores que este.
+
+--EJERCICIO PROPUESTO: Conjetura de Collatz. Mirar que es. Definir una función que obtenga todas las cadenas de collatz de losgitud menor o igual a un n dado que hay entre los números de inicio x e y. Oju que és difícil, anar amb compte i no fa falta acabarla
