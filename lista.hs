@@ -1,5 +1,6 @@
 import Data.List
 import Data.Function
+import Data.Char
 --3.
 --elem et diu si x es a xs. Passan-li la llista estem creant la llista de booleans que tenen cada element de xs a la llista ys.
 --and d'una llista de booleans et retorna la porta lògica and de tots els elements de la llista (si tot and = true, sinó dóna false)
@@ -61,7 +62,10 @@ concatLists (x:xs)
 
 letterFreqClasse:: String -> [(Char, Int)]
 letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
-                       where agrupar = sort
+                       where agrupar::[(Char,Int)]->[(Char,Int)]
+                             xs = (filter (\(c,x) -> (pred c)).sort)
+                             pred c = not (isSpace c && isPunctuation c)
+                             agrupar = (xs.map (\(c,x) -> (toLower c, x)))
                              sumar = foldr op []
                              op :: (Char, Int) -> [(Char, Int)] -> [(Char, Int)]
                              op (c, x) [] = (c,x):[] --[(c,x)] també val
@@ -76,7 +80,7 @@ letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
 -- EJERCICIO PROPUESTO: que solo saque letras, ni signos de exclamacion ni espacios
 -- EJERCICIO PROPUESTO 2: cuente mayúsculas y minúsculas iguales.
 
---EJERCICIO PERMUTACIONES DE LA LISTA 1: hacer todas las permutaciones de una lista dada.
+-- EJERCICIO PERMUTACIONES DE LA LISTA 1: hacer todas las permutaciones de una lista dada.
 
          
 -- EJERCICIO: usar span para recorrer xs una sola vez
@@ -88,5 +92,15 @@ triadsxLTyLTz n = [(x,y,z) | x <- [1..n], y <- [x..n], z <- [y+1..n], x^2 + y^2 
 triadsThr n = [(x,y,z) | x <- [1..n], y <- [x..n], z <- [y+1..n], mod x 2 /= 1 || mod y 2 /=1, x^2 + y^2 == z^2]
 
 --EJERCICIO PROPUESTO: Un número es perfecto si es igual a la suma de todos sus divisores excepto el mismo. Dissenyar una funcion que obtenga, dado un n, todos los numeros perfectos menores que este.
+
+perfect n = [x | x <- [1..n], sum(divisors x) == x]
+    where
+    divisors::Int->[Int]
+    divisors n = [y | y <- [1..(n-1)], n `rem` y == 0]
+
+perfectEuclidEuler = [mersenne*2^(p-1) | p <- [2..], let mersenne = 2^p-1, isPrime mersenne]
+    where
+    isPrime n = [x | x <- [2..n], n `rem` x == 0] == [n]
+
 
 --EJERCICIO PROPUESTO: Conjetura de Collatz. Mirar que es. Definir una función que obtenga todas las cadenas de collatz de losgitud menor o igual a un n dado que hay entre los números de inicio x e y. Oju que és difícil, anar amb compte i no fa falta acabarla
