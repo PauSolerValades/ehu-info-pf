@@ -1,3 +1,7 @@
+import Data.List
+import Data.Function
+import Data.Char
+
 raices::(Float, Float, Float) -> (Float, Float)
 raices (a,b,c)
        | a==0       = (-c/b,0.0)
@@ -39,18 +43,18 @@ quitarRep' (x:xs) = x : quitarRep' (quitarTodos x xs)
                   quitarTodos _ [] = []
                   quitarTodos z (y:ys) = if z == y then quitarTodos z ys else y : quitarTodos z ys
 
---per ajuntar una element a una llista, poses x:s, com després del else. El primer igual de quitaRep [] = [] serveix per parar la recursió, és a dir, que fa el que sembla  que fa de primeres.
+--per ajuntar una element a una llista, poses x:s, com després del else. El primer igual de quitaRep [] = [] serveix per parar la recursió, és a dir, si arriba llista buida d'argument, retona llista buida.
 
 --Ejercicio 3
 dif:: (Eq a) => [a] -> [a] -> [a]
-dif xs [] = xs
+dif xs [] = xs --és a dir, que si els arguments son una llista i llista buida, torna la llista.
 dif xs (y:ys) = dif (quitaUno y xs) ys
 
 --Ejercicio 4
 perm:: (Eq a) => [a] -> [a] -> Bool
 perm xs ys = (dif xs ys == []) && (dif ys xs == [])
 
---Ejercico 5
+--Ejercicio 5
 --Si compares llistes necessites el Eq(a)
 sonpermde1:: (Eq a) => [[a]] -> [[a]]
 sonpermde1 [] = [] --això és la llista que no conté cap llista.
@@ -58,7 +62,7 @@ sonpermde1 (x:xs) = x:sonperm x xs
                     where 
                     sonperm:: (Eq a) => [a] -> [[a]] -> [[a]]
                     sonperm y [] = []
-                    sonperm y (z:zs) = if perm z y then z: sonperm y zs else sonperm y zs
+                    sonperm y (z:zs) = if perm z y then z:sonperm y zs else sonperm y zs
 
 sonpermde2::(Eq a) => [[a]] -> [[a]]
 sonpermde2 [] = []
@@ -73,10 +77,10 @@ timesTen (x:xs)
 aDecimal'::[Int]->Int
 aDecimal' xs = foldr (+) 0 (timesTen xs)
 
---aDecmial::[Int]->Int
---aDecimal xs = foldl g 0 xs
-                --where 
-                --g x y = 10*x + y
+aDecimal::[Int]->Int
+aDecimal xs = foldl g 0 xs
+    where 
+        g x y = 10*x + y
 
 
 aDigit 0 = []
@@ -87,8 +91,42 @@ aDigitos n
         | 0 <= n && n <= 9 = [n] --caso simple
         | otherwise = aDigitos (n `div` 10) ++ [n `mod` 10]
 
---Ejercicio 9 takeWhile dropWhile:
-    
+--Ejercicio 7
+--decimalAbinario::Int->Int
+division::Int->[Int]
+division d = if quotient >= 2 then residue:division(quotient)
+    else residue:(quotient:[])
+        where
+            residue = d `mod` 2
+            quotient = div d 2
+
+decimalAbinario d = (foldr (\x y -> 10*y + x) (0). division) d
+decimalAbinario' d = (aDecimal.(reverse.division)) d
+
+{-
+a::Int->Int
+a d = if quotient >= 2 then residue:a(quotient)
+    else add(residue:(quotient:[]))
+        where
+            residue = d `mod` 2
+            quotient = div d 2
+            add::[Int]->Int
+            add xs = foldr (\x y -> 10*y + x) (0) xs
+            
+-}
+
+binarioAdecimal b = (foldl (\x y -> 2*x+y) (0).aDigitos) b
+ 
+ 
+--8.
+ordenada:: (Ord a) => [a]->Bool --Ord a: per a tot a amb propietat ORDENABLE, executa la funció.
+ordenada (x:xs)
+    | xs == []       = True
+    | (x <= head xs) = ordenada(xs)
+    | otherwise      = False
+
+ 
+--9.
 {-en aquesta es fan dos recorreguts de la mateixa llista, un per take i un per drop-}
 
 palabras:: String->[String]
@@ -105,7 +143,47 @@ listPal s = case dropWhile isSpace s of
     "" -> []
     s' -> w : palabras s''
         where (w,s'') = break isSpace s' --span !isSpace s' == takeWhile isSpace s', dropWhile !isSpace
+        
+--10.
+posiciones x xs = [p | (e,p) <- zip xs [0..], e==x]
 
+--11.
 
+paraTodo p xs = length(filter (p) xs) == length xs
+existe p xs = (filter (p) xs) == []
 
+paraTodo' p xs = and[p(k) | k <- xs]
+existe' p xs = or[p(k) | k <- xs]
 
+--això no és cap exercici, pero tenia curiositat de com haskell compta els elements d'una llista, fins i tot potser ho fa així xD
+myLenght:: (Eq a) => [a]->Int
+myLenght list = aux 0 list
+    where
+    aux:: (Eq a) => Int->[a]->Int
+    aux i xs
+        | xs == [] = i
+        | otherwise = aux (i+1) (tail xs)
+
+--12.
+perms :: (Eq a) => [a] -> [[a]]
+perms [] = [[]]
+perms p = [x:xs | x <- p, xs <- perms (delete x p)]
+          where
+          delete x xs = fst (partition (/=x) xs) 
+          --partition parteix la llista en dos seguint la condició p
+
+--13.
+
+sublista s1 s2 = and [booleano i | i <- s1]
+   where
+   booleano i  = if (filter (==i) s2) == [] then False else True
+
+--15.
+
+diag::String->String
+diag s = concat (aux 0 (map(:"\n") s))
+    where
+    aux::Int->[String]->[[Char]]
+    aux i (x:xs)
+        | xs == []        = (replicate i " ")++[x]
+        | otherwise       = (replicate i " ")++(x:(aux (i+1) xs))

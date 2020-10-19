@@ -1,6 +1,7 @@
 import Data.List
 import Data.Function
 import Data.Char
+
 --3.
 --elem et diu si x es a xs. Passan-li la llista estem creant la llista de booleans que tenen cada element de xs a la llista ys.
 --and d'una llista de booleans et retorna la porta lògica and de tots els elements de la llista (si tot and = true, sinó dóna false)
@@ -82,6 +83,12 @@ letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
 
 -- EJERCICIO PERMUTACIONES DE LA LISTA 1: hacer todas las permutaciones de una lista dada.
 
+perms :: (Eq a) => [a] -> [[a]]
+perms [] = [[]]
+perms p = [x:xs | x <- p, xs <- perms (delete x p)]
+          where
+          delete x xs = (takeWhile (/=x) xs) ++ tail (dropWhile (/=x) xs)         
+-- Ejercicio: Usar span para recorrer xs una sóla vez  
          
 -- EJERCICIO: usar span para recorrer xs una sola vez
 
@@ -98,9 +105,25 @@ perfect n = [x | x <- [1..n], sum(divisors x) == x]
     divisors::Int->[Int]
     divisors n = [y | y <- [1..(n-1)], n `rem` y == 0]
 
-perfectEuclidEuler = [mersenne*2^(p-1) | p <- [2..], let mersenne = 2^p-1, isPrime mersenne]
+perfectEuclidEuler = [mersenne*2^(p-1) | p <- [2..], let mersenne = 2^p-1, arePrime p]
     where
-    isPrime n = [x | x <- [2..n], n `rem` x == 0] == [n]
+    arePrime n = [x | x <- [2..n], n `rem` x == 0] == [n]
+
+
+
+--p is the index of the mersenne number 2^p-1
+--lucaslehmerPrime p mersenne =
+
+
 
 
 --EJERCICIO PROPUESTO: Conjetura de Collatz. Mirar que es. Definir una función que obtenga todas las cadenas de collatz de losgitud menor o igual a un n dado que hay entre los números de inicio x e y. Oju que és difícil, anar amb compte i no fa falta acabarla
+
+
+myLenght::[a]->Int
+myLenght l = aux(0 l)
+    where
+        aux::Int->[a]->Int
+        aux i x:xs
+            | xs == [] = i+1
+            | otherwise aux i+1 xs
