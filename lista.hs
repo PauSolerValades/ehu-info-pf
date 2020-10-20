@@ -123,6 +123,11 @@ collatz_next::Int->Int
 collatz_next n
     | mod n 2 == 0  = div n 2
     | mod n 2 == 1  = 3*n + 1
+    
+collatz_chains' n = [cadenas x | x<-[1..n]]
+   where
+      cadenas x = reverse(collatz_chain [x])
+      
 
 --això no és cap exercici, pero tenia curiositat de com haskell compta els elements d'una llista, fins i tot potser ho fa així xD
 myLenght:: (Eq a) => [a]->Int
