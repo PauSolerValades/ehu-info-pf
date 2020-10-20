@@ -2,6 +2,13 @@ import Data.List
 import Data.Function
 import Data.Char
 
+--1.
+intersec::(Eq a) => [a]->[a]->[a]
+intersec xs ys = [x | x <- xs, elem x ys]
+
+--2.
+numveces x xs = (length.filter (==x)) xs --AIXÍ ES COMPOSEN ELS PUTOS MAPS I ELS FILTERS, AMB EL PREDICAT A DINS
+
 --3.
 --elem et diu si x es a xs. Passan-li la llista estem creant la llista de booleans que tenen cada element de xs a la llista ys.
 --and d'una llista de booleans et retorna la porta lògica and de tots els elements de la llista (si tot and = true, sinó dóna false)
@@ -13,10 +20,8 @@ mismosElem xs ys = and [elem x ys | x <- xs] && and [elem y xs | y <- ys]
 
 --el operador xs !! x da la posicion xs[x]
 --posiciones :: (Eq a) a -> [a] -> [Int]
-posiciones x xs =  zip xs [0..(length xs -1)]
 
 posiciones' x xs = [p | (e,p) <- zip xs [0..], e==x]
-posiciones'' x xs = [p | (e,p) <- zip xs [0..], e==x]
 
 --5.
 posimpar :: [a]->[a]
@@ -65,7 +70,7 @@ letterFreqClasse:: String -> [(Char, Int)]
 letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
                        where agrupar::[(Char,Int)]->[(Char,Int)]
                              xs = (filter (\(c,x) -> (pred c)).sort)
-                             pred c = not (isSpace c && isPunctuation c)
+                             pred c = not (isSpace c || isPunctuation c)
                              agrupar = (xs.map (\(c,x) -> (toLower c, x)))
                              sumar = foldr op []
                              op :: (Char, Int) -> [(Char, Int)] -> [(Char, Int)]
@@ -74,10 +79,7 @@ letterFreqClasse str = (sumar.agrupar) (zip str [1 | i <- [0..]])
                                  if (c==d) 
                                  then (c,x+y):resto 
                                  else (c,x):(((d, y):resto))
---op = \(c,x) ps -> if c == (fst.head) ps 
---then (c,c+(snd.head)ps):(tail ps)
---else (c,x):ps
-                                 
+
 -- EJERCICIO PROPUESTO: que solo saque letras, ni signos de exclamacion ni espacios
 -- EJERCICIO PROPUESTO 2: cuente mayúsculas y minúsculas iguales.
 
@@ -88,8 +90,7 @@ perms [] = [[]]
 perms p = [x:xs | x <- p, xs <- perms (delete x p)]
           where
           delete x xs = (takeWhile (/=x) xs) ++ tail (dropWhile (/=x) xs)         
--- Ejercicio: Usar span para recorrer xs una sóla vez  
-         
+  
 -- EJERCICIO: usar span para recorrer xs una sola vez
 
 --9
@@ -110,20 +111,25 @@ perfectEuclidEuler = [mersenne*2^(p-1) | p <- [2..], let mersenne = 2^p-1, arePr
     arePrime n = [x | x <- [2..n], n `rem` x == 0] == [n]
 
 
+{-EJERCICIO PROPUESTO: Conjetura de Collatz. Mirar que es. Definir una función que obtenga todas las cadenas de collatz de losgitud menor o igual a un n dado que hay entre los números de inicio x e y. Oju que és difícil, anar amb compte i no fa falta acabarla
+-}
 
---p is the index of the mersenne number 2^p-1
---lucaslehmerPrime p mersenne =
+collatz_chains n = [reverse(collatz_chain [x]) | x<-[1..n]]
 
+collatz_chain::[Int]->[Int]
+collatz_chain xs = if (head xs)==1 then xs else collatz_chain(collatz_next((head xs)):xs)
 
+collatz_next::Int->Int
+collatz_next n
+    | mod n 2 == 0  = div n 2
+    | mod n 2 == 1  = 3*n + 1
 
-
---EJERCICIO PROPUESTO: Conjetura de Collatz. Mirar que es. Definir una función que obtenga todas las cadenas de collatz de losgitud menor o igual a un n dado que hay entre los números de inicio x e y. Oju que és difícil, anar amb compte i no fa falta acabarla
-
-
-myLenght::[a]->Int
-myLenght l = aux(0 l)
+--això no és cap exercici, pero tenia curiositat de com haskell compta els elements d'una llista, fins i tot potser ho fa així xD
+myLenght:: (Eq a) => [a]->Int
+myLenght list = aux 0 list
     where
-        aux::Int->[a]->Int
-        aux i x:xs
-            | xs == [] = i+1
-            | otherwise aux i+1 xs
+    aux:: (Eq a) => Int->[a]->Int
+    aux i xs
+        | xs == [] = i
+        | otherwise = aux (i+1) (tail xs)
+

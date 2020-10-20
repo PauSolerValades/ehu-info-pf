@@ -152,17 +152,9 @@ posiciones x xs = [p | (e,p) <- zip xs [0..], e==x]
 paraTodo p xs = length(filter (p) xs) == length xs
 existe p xs = (filter (p) xs) == []
 
+paraTodo'::(a->Bool)->[a]->Bool
 paraTodo' p xs = and[p(k) | k <- xs]
 existe' p xs = or[p(k) | k <- xs]
-
---això no és cap exercici, pero tenia curiositat de com haskell compta els elements d'una llista, fins i tot potser ho fa així xD
-myLenght:: (Eq a) => [a]->Int
-myLenght list = aux 0 list
-    where
-    aux:: (Eq a) => Int->[a]->Int
-    aux i xs
-        | xs == [] = i
-        | otherwise = aux (i+1) (tail xs)
 
 --12.
 perms :: (Eq a) => [a] -> [[a]]
@@ -187,3 +179,5 @@ diag s = concat (aux 0 (map(:"\n") s))
     aux i (x:xs)
         | xs == []        = (replicate i " ")++[x]
         | otherwise       = (replicate i " ")++(x:(aux (i+1) xs))
+    
+--filoxenia el rapto a europa
