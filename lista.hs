@@ -137,4 +137,9 @@ myLenght list = aux 0 list
     aux i xs
         | xs == [] = i
         | otherwise = aux (i+1) (tail xs)
+        
+myFunList::(Eq a) => [a]->Int
+myFunList [] = 0
+myFunList (_:xs) = myFunList(xs) + 1
+
 

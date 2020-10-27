@@ -27,6 +27,10 @@ longestNestedLista (x:xs) = aux 0 (x:xs)
     aux::Int->[[a]]->Int
     aux i [] = i
     aux i (x:xs) = if (length x >= i) then aux (length x) xs else aux i xs
+    
+longestNestedListaFun::[[a]]->Int
+longestNestedListaFun (x:[]) = length x
+longestNestedListaFun (x:xs) = if length x < length (head xs) then longestNestedListaFun xs else longestNestedListaFun (x:(tail xs))
 
 --Ejercicio 2b
 
