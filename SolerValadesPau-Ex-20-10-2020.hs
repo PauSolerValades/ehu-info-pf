@@ -54,6 +54,12 @@ gray n = aux 1 (gray 1)
         | otherwise   = aux (i+1) (next_gray xs)
     next_gray::[String]->[String]
     next_gray xs = map ("0"++) xs ++ map ("1"++) (reverse xs)
+    
+grayFun::Int->[String]
+grayFun 1 = ["0","1"]
+grayFun n = map ("0"++) (prev_gray) ++ map ("1"++) (reverse(prev_gray))
+    where
+    prev_gray = grayFun (n-1)
 
 --Ejercicio 4a
 
