@@ -5,9 +5,9 @@ newtype Fecha = New(Int,Int,Int) --tipo nuevo. Lo puedes llamar de qualquier man
 
 instance Ord Fecha where
     New(d,m,a) <= New(d',m',a') = (a,m,d) <= (a',m',d')
-    
--- Ejercicio: Utilizar una función de tipo fold para definir una 
--- función que dada una lista de Fechas obtenga la fecha más temprana. 
+  
+--Ejercicio: mostrar la fecha usando una funcion auxiliar showmes
+--que muestre Enero, Febrero, Marzo,  etc
 
 instance Show Fecha where
     show (New(d,m,a)) = 
@@ -26,9 +26,9 @@ instance Show Fecha where
                               11-> "Noviembre"
                               12-> "Diciembre"
                         
---Ejercicio: mostrar la fecha usando una funcion auxiliar showmes
---que muestre Enero, Febrero, Marzo,  etc
 
+-- Ejercicio: Utilizar una función de tipo fold para definir una 
+-- función que dada una lista de Fechas obtenga la fecha más temprana. 
 fechaMasTemp :: [Fecha] -> Fecha
 fechaMasTemp [] = error "no hay ninguna fecha"
 --fechaMasTemp [f] = f --sobra
@@ -39,7 +39,7 @@ data Racional = Int :/ Int -- Data es un TIPO ALGEBRAICO. Para cosas de algebra.
 -- Ejercicio: Definir Racional como una instancia de la clase Eq,
 -- tal que por ejemplo 1/2 == 2/4 == 3/6,  etc.
 
-
+-- Si poses que la teva classe Racional deriving Eq, 1/2 != 2/4. En canvi, si tu li defineixes el == amb Instance Eq, pots posar el que vulguis
 instance Eq Racional where 
   (x:/y) == (x':/y') = x*y' == y*x'
   
@@ -53,8 +53,6 @@ instance Ord Racional where
               -- que muestre 1:/2 como 1/2
               -- que muestre x/x como 1
               -- que muestre 2/4 como 1/2
-             
-
 instance Show Racional where
     show (x :/ y) = if den == 1 then show num else (show num) ++ "/" ++ (show den)
            where
