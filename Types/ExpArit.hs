@@ -6,7 +6,7 @@ data Expr a =  N a
               | Expr a :-: Expr a  
               | Expr a :*: Expr a  
               | Expr a :/: Expr a 
-              deriving (Eq, Show)
+              deriving (Eq)
 
 
 
@@ -28,3 +28,9 @@ evaluar (e1 :/: e2) = evaluar e1 / evaluar e2
 -- 3. Hacer (Exp a) instancia de la clase Num
 
 -- Per fer això necessitaré entendre tota aquesta merda, nais. Em poso a la biblio de la resi i a tope
+
+instance Show Expr where
+    show = mostrarExpr
+
+mostrarExpr::Expr -> String
+mostrarExpr N a = show a
