@@ -81,7 +81,7 @@ sub2 = [("culpA", True), ("culpB", False), ("culpC", True)]
 
 -- La función evaluar (prop no es polimorfico)
 evaluar:: Subs -> Prop -> Bool
-evaluar sb (C b) = b
+evaluar _ (C b) = b
 evaluar sb (X s) = apply sb s --lo pensamos como una función
                    where apply sb s = (snd.head) (dropWhile ((/=s).fst) sb)
                    
@@ -99,6 +99,19 @@ evaluar sb (p1 :<-> p2) = let ep1 = evaluar sb p1
 -- La lista de todas las substituciones que son posibles modelos de una proposici�n
                
 -- Las funciones principales: sat, modelos, taut
+
+lisBool::Int->[[Bool]]
+lisBool 1 = [[True], [False]]
+lisBool n = map ([True] ++) (ant) ++ map ([False] ++) (ant)
+   where
+     ant = lisBool (n-1)
+
+--lisSubs p sea la lista de todas las posibles substituciones de las variables de p
+listSubs:: Prop -> [Subs]
+listSubs p = [zip listvar listbool | listbool <- (lisBool n) ]
+  where 
+    listvar = (quitarRep . vars) p
+    n = length listvar
 
 -- sat:: Prop -> Bool
 -- (sat p) es True si y solo si p es satisfactible 

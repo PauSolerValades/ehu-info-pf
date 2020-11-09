@@ -6,7 +6,7 @@ data Expr a =  N a
               | Expr a :-: Expr a  
               | Expr a :*: Expr a  
               | Expr a :/: Expr a 
-              deriving (Eq, Show)
+              deriving (Eq)
 
 
 
