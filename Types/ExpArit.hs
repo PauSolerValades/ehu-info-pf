@@ -29,8 +29,6 @@ evaluar (e1 :/: e2) = evaluar e1 / evaluar e2
 
 -- Per fer això necessitaré entendre tota aquesta merda, nais. Em poso a la biblio de la resi i a tope
 
-instance Show Expr where
-    show = mostrarExpr
+instance Show a => Show (Expr a) where
+    show (N a) = show a
 
-mostrarExpr::Expr -> String
-mostrarExpr N a = show a
