@@ -78,7 +78,13 @@ type Subs = [(String, Bool)]
 -- Una sustitución asoacia a cada variable (string) un valor de verdad (Bool)
 sub1 = [("p", True), ("q", False), ("a", False), ("r", True)] --ejemplo sustitución prop6
 sub2 = [("culpA", True), ("culpB", False), ("culpC", True)]
-
+--subs debbería ser una función
+-- type Subs = String -> Bool
+-- Ejemplos: 
+--sb1 "p" = True
+--sb1 "q" = False
+--sb1 "r" = True
+--sb1 "a" = False
 -- La función evaluar (prop no es polimorfico)
 evaluar:: Subs -> Prop -> Bool
 evaluar _ (C b) = b
@@ -123,3 +129,13 @@ listSubs p = [zip listvar listbool | listbool <- (lisBool n) ]
 -- taut:: Prop -> Bool
 -- (taut p) es True si y solo si p es una tautología 
 -- i.e. es cierta para cualquier substitución.
+
+-- EJERCICIO: hacer todos los ajustes necessarios en el programa de arriba para que el tipo subs sea string -> Bool.
+
+graphOf f  = [(e,v) | e <- [0..], v <-[f e]] --esto es el inverso del zip en la función en la que aparece.
+
+fromGraph::Eq a => [(a,b)] -> a -> b --esta es la que queremos.
+fromGraph m i = (snd . head) (filter ((==i) . fst) m)
+--(filter (==i) . fst) m::[(a,b)]
+--(filter (==i) . fst) m = [(i,v), ..]
+-- (snd . head)  [(i,v), ..] => v
