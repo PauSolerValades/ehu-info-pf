@@ -146,4 +146,6 @@ evaluar = foldArbol (\x->x) g
 --Autoresposta: Quan no determines el tipus d'algunes funcions a haskell, ell mateix assumeix el tipus que li agrada.
 -- En aquest case evaluar no tenia el typing, per tant assumia que volies el tipus Integer, pero quan li declares Int tot ja funcional
 
+--Estic afegint canvis aleaòris per poder provar si tot va
+
 --PREGUNTAR RESPECTE A LA RESPOSTA: Perque numOperadores funciona tot i tenint aquest problema sense declarar res però evaluar m'envia a la merda?
