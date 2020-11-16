@@ -166,7 +166,7 @@ evaluar' = foldArbol id (\op a b -> case op of
 
 --ARBOLES N-ÁRIOS
 
-data ArbN a = NodoN a [ArbN a]
+data ArbN a = NodoN a [ArbN a] deriving (Eq, Show)
 
 --Podemos hacer el show para practicar,però quina mandra xd
 
@@ -206,9 +206,13 @@ preorden (NodoN r ts)
     | null ts    = [r]
     | otherwise  = [r] ++ preorden (head ts)
 
+
 --ni puta idea del preorden
-preorden' = foldt f
-    where 
-        f r [] = [r]
-        f r ts = r:(tail ts)
-        
+preorden'::ArbN a -> [a]
+preorden' (NodoN r ts) xs
+    | nextLevel (r ts) xs == NodoN 0 [] = preorden(head(tail ts))
+    | otherwise = r:preorden(head(tail ts))
+
+nextLevel (NodoN r ts) = if null ts then NodoN 0 [] else head ts
+
+returnList (NodoN r ts) = ts
