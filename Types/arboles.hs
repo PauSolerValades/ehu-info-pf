@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 data ArBin a = Vac | Nodo (ArBin a) a (ArBin a) deriving Eq
 
 a4 = Nodo(Nodo Vac 3 (Nodo Vac 5 Vac)) 6 (Nodo (Nodo Vac 7 Vac) 8 Vac)
@@ -174,6 +175,8 @@ arb1 = NodoN 1 [NodoN 2 [],
                          NodoN 5 [NodoN 6 [NodoN 7 []]]],
                 NodoN 8 [NodoN 9 [NodoN 10 []]]]
 
+arb2 = NodoN 1 []
+
 foldt :: (a -> [b] -> b) -> ArbN a -> b
 foldt f (NodoN r ts) = f r (map (foldt f) ts)
 
@@ -193,4 +196,19 @@ longestBranch = foldt f
 
 --EJERCICIOS PARA CASA:
 -- 1. Función que calcula la profundidad.
--- 2. Función que devuelde la lista de todos los nodos en preorden
+-- 2. Función que devuelde la lista de todos1 los nodos en preorden
+profunditat = foldt f
+    where
+        f _ [] = 1
+        f _ ts = maximum ts +1
+preorden::ArbN a -> [a]
+preorden (NodoN r ts)
+    | null ts    = [r]
+    | otherwise  = [r] ++ preorden (head ts)
+
+--ni puta idea del preorden
+preorden' = foldt f
+    where 
+        f r [] = [r]
+        f r ts = r:(tail ts)
+        
