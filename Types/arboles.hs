@@ -209,25 +209,23 @@ preorden = foldt f
         f r zs = if null zs then [r] else let NodoN n xs = head zs in [r] ++ [n]
         masLarga = foldr1 (\xs ys -> if length xs > length ys then xs else ys)
         -}
-
-preordre :: [ArbN a] -> [a]
-preordre (NodoN r t:ts) = if null ts then [r] else r:preordre t --si ts es llista buida, t es l'últim element de la llista
- 
 {-
+
+preorden:: ArbN a -> [a]
 preorden = foldt f
     where
         f r [] = [r]
-        f r zs = r:newList zs
-        newList (z:zs) = if null zs then [out z] else out z:newList zs
-        out (NodoN n _) = n
--}
+        f r zs = r
 
-preorden' (NodoN r ts) = if null ts then [r] else r:newList ts
+preord = foldt f
     where
-        newList (z:zs) = if null zs then [out z] else out z:newList zs
-        out (NodoN n _) = n
+        f r [] = [r]
+        f x ts = [x] ++ partir ts
+        partir (t:ts) = if null ts then [t else t:partir(ts)
+-}
+preorden::ArbN a -> [a]
+preorden (NodoN r []) = [r]
+preorden (NodoN x ts) = x:partir ts
+    where
+        partir (t:ts) = if null ts then preorden(t) else preorden (t) ++ partir(ts) 
 
-
-fun (NodoN n ns) = if null ns then [out (head ns)] else n:fun n (tail ns)
-
-out (NodoN n _) = n

@@ -77,3 +77,25 @@ deleteBST v (NodeBST ai r ad)
           --el meu delte max li fa falta ser exhausitu, si borres qualsevol cosa que nosigui una fulla peta
           deleteMax' (NodeBST bi r EmptyBST) = (r, bi)
           deleteMax' (NodeBST bi r bd) = let (r', bd') = deleteMax' bd in (r', NodeBST bd r bd')
+
+type Dicc = BST (String, String)
+
+d = createTree[ ("capsinada","cabezadita"), ("casa","house"), ("cotxe","car"), ("gat","cat"), ("gos", "dog"), ("migdiada", "siesta"), ("plato","Aristocles")]
+
+--búsqueda como en las transparencias
+lookUp:: String -> Dicc -> Maybe String
+lookUp k EmptyBST = Nothing
+lookUp k (NodeBST ai (x,y) ad)
+    | k == x      = Just y
+    | k < x       = lookUp k ai
+    | k > x       = lookUp k ad
+
+--maybe::b->(a -> b) -> Maybe a -> b. En reclook up tan a com b son strings
+reclookup :: String -> Dicc -> String
+reclookup k d= maybe "No al diccionari" id (lookUp k d)
+--                          b        (a -> b)->Maybe a -> b
+data MiMaybe a = Error String | OK a
+
+--tu tipo maybe envez de nothing da error directamente.
+mimaybe:: b->(a->b) -> MiMaybe a -> b
+-- se tendria que reescribir los tres códigos importantes lookUp, recLookUp pero con mimaybe, que devuelve error en vez de las cosas.
