@@ -201,18 +201,33 @@ profunditat = foldt f
     where
         f _ [] = 1
         f _ ts = maximum ts +1
-preorden::ArbN a -> [a]
-preorden (NodoN r ts)
-    | null ts    = [r]
-    | otherwise  = [r] ++ preorden (head ts)
+
+{-
+preorden = foldt f
+    where
+        f r [] = [r]
+        f r zs = if null zs then [r] else let NodoN n xs = head zs in [r] ++ [n]
+        masLarga = foldr1 (\xs ys -> if length xs > length ys then xs else ys)
+        -}
+
+preordre :: [ArbN a] -> [a]
+preordre (NodoN r t:ts) = if null ts then [r] else r:preordre t --si ts es llista buida, t es l'últim element de la llista
+ 
+{-
+preorden = foldt f
+    where
+        f r [] = [r]
+        f r zs = r:newList zs
+        newList (z:zs) = if null zs then [out z] else out z:newList zs
+        out (NodoN n _) = n
+-}
+
+preorden' (NodoN r ts) = if null ts then [r] else r:newList ts
+    where
+        newList (z:zs) = if null zs then [out z] else out z:newList zs
+        out (NodoN n _) = n
 
 
---ni puta idea del preorden
-preorden'::ArbN a -> [a]
-preorden' (NodoN r ts) xs
-    | nextLevel (r ts) xs == NodoN 0 [] = preorden(head(tail ts))
-    | otherwise = r:preorden(head(tail ts))
+fun (NodoN n ns) = if null ns then [out (head ns)] else n:fun n (tail ns)
 
-nextLevel (NodoN r ts) = if null ts then NodoN 0 [] else head ts
-
-returnList (NodoN r ts) = ts
+out (NodoN n _) = n
