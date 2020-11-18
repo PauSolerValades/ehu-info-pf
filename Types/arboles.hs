@@ -176,6 +176,20 @@ arb1 = NodoN 1 [NodoN 2 [],
                 NodoN 8 [NodoN 9 [NodoN 10 []]]]
 
 arb2 = NodoN 1 []
+arb3 = NodoN 8 [NodoN 12 [NodoN 14 [NodoN 15 [],
+                                    NodoN 13 []],
+                          NodoN 10 [NodoN 11 [],
+                                    NodoN 9 []]],
+                NodoN 4  [NodoN 6  [NodoN 7 [],
+                                    NodoN 5 []],
+                          NodoN 2  [NodoN 3 [],
+                                    NodoN 1 []]]]
+
+arb4 = NodoN 1 [NodoN 2 [NodoN 5 [],
+                         NodoN 6 [],
+                         NodoN 7 []],
+                NodoN 3 [],
+                NodoN 4 []]
 
 foldt :: (a -> [b] -> b) -> ArbN a -> b
 foldt f (NodoN r ts) = f r (map (foldt f) ts)
@@ -202,30 +216,58 @@ profunditat = foldt f
         f _ [] = 1
         f _ ts = maximum ts +1
 
-{-
-preorden = foldt f
+--Aquest és el bo, amb el fold
+preordre :: ArbN a -> [a]
+preordre = foldt f
     where
         f r [] = [r]
-        f r zs = if null zs then [r] else let NodoN n xs = head zs in [r] ++ [n]
-        masLarga = foldr1 (\xs ys -> if length xs > length ys then xs else ys)
-        -}
-{-
+        f r zs = r:concat zs
 
-preorden:: ArbN a -> [a]
-preorden = foldt f
-    where
-        f r [] = [r]
-        f r zs = r
-
-preord = foldt f
-    where
-        f r [] = [r]
-        f x ts = [x] ++ partir ts
-        partir (t:ts) = if null ts then [t else t:partir(ts)
--}
+--Aquesta és la manera més senzilla pero sense plegar.
 preorden::ArbN a -> [a]
 preorden (NodoN r []) = [r]
 preorden (NodoN x ts) = x:partir ts
     where
-        partir (t:ts) = if null ts then preorden(t) else preorden (t) ++ partir(ts) 
+        partir (t:ts) = if null ts then preorden t else preorden t ++ partir ts 
 
+--Aquest postordre funciona
+postordre :: ArbN a -> [a]
+postordre = foldt f
+    where
+        f r [] = [r]
+        f r zs = concat zs ++ [r]
+
+postorden::ArbN a -> [a]
+postorden (NodoN r []) = [r]
+postorden (NodoN x ts) = partir ts ++ [x]
+    where
+        partir (t:ts) = if null ts then postorden t else postorden t ++ partir ts
+
+--inordre has de tallar la llista amb un split at al primer nombre que sigui més gran que root
+inordre::ArbN a -> [a]
+inordre (NodoN r []) = [r]
+inordre (NodoN x ts) = partir(fst (n ts)) ++ x:partir(snd (n ts))
+    where
+        n::[a] -> ([a], [a])
+        n ts= splitAt (length ts -1) ts
+        partir (t:ts) = if null ts then postorden t else postorden t ++ partir ts
+    
+inorden::ArbN a -> [a]
+inorden = foldt f
+    where
+        f r [] = r
+        f r zs = insert r (concat zs)
+        insert:: a -> [a] -> [a]
+        insert x (y:ys)= if null ys then x:[y] else y ++ insert x ys
+            
+{-
+f r zs = let aux = reverse(concat zs) 
+                     z = head aux
+                     zss = reverse(tail aux) in zss ++ [r]
+-}
+{-
+let zss = concat zs 
+                (first, last) = splitAt (length zss -1) zss
+            in first ++ [r] ++ last
+
+-}

@@ -97,5 +97,5 @@ reclookup k d= maybe "No al diccionari" id (lookUp k d)
 data MiMaybe a = Error String | OK a
 
 --tu tipo maybe envez de nothing da error directamente.
-mimaybe:: b->(a->b) -> MiMaybe a -> b
+--mimaybe:: b->(a->b) -> MiMaybe a -> b
 -- se tendria que reescribir los tres códigos importantes lookUp, recLookUp pero con mimaybe, que devuelve error en vez de las cosas.
