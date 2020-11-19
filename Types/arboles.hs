@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
 data ArBin a = Vac | Nodo (ArBin a) a (ArBin a) deriving Eq
 
 a4 = Nodo(Nodo Vac 3 (Nodo Vac 5 Vac)) 6 (Nodo (Nodo Vac 7 Vac) 8 Vac)
@@ -252,22 +251,12 @@ inordre (NodoN x ts) = partir(fst (n ts)) ++ x:partir(snd (n ts))
         n ts= splitAt (length ts -1) ts
         partir (t:ts) = if null ts then postorden t else postorden t ++ partir ts
     
+--el problema aquí radicaba que si no li dius el tipus a f, assumeix que f r [] té f::a->[a]->[a] quan ha de tenir f::a->[[a]]->[a]
 inorden::ArbN a -> [a]
 inorden = foldt f
     where
-        f r [] = r
-        f r zs = insert r (concat zs)
-        insert:: a -> [a] -> [a]
-        insert x (y:ys)= if null ys then x:[y] else y ++ insert x ys
-            
-{-
-f r zs = let aux = reverse(concat zs) 
-                     z = head aux
-                     zss = reverse(tail aux) in zss ++ [r]
--}
-{-
-let zss = concat zs 
-                (first, last) = splitAt (length zss -1) zss
-            in first ++ [r] ++ last
-
--}
+        --f:: a -> [[a]] -> [a]
+        f r [] = [r]
+        f r zs = 
+            let (f, l) = splitAt (length zs -1) zs 
+            in concat f ++ [r] ++ concat l

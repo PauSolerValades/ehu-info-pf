@@ -84,7 +84,7 @@ d = createTree[ ("capsinada","cabezadita"), ("casa","house"), ("cotxe","car"), (
 
 --búsqueda como en las transparencias
 lookUp:: String -> Dicc -> Maybe String
-lookUp k EmptyBST = Nothing
+lookUp _ EmptyBST = Nothing
 lookUp k (NodeBST ai (x,y) ad)
     | k == x      = Just y
     | k < x       = lookUp k ai
@@ -94,8 +94,23 @@ lookUp k (NodeBST ai (x,y) ad)
 reclookup :: String -> Dicc -> String
 reclookup k d= maybe "No al diccionari" id (lookUp k d)
 --                          b        (a -> b)->Maybe a -> b
-data MiMaybe a = Error String | OK a
+data MiMaybe a = Error String | OK a deriving (Show)
 
 --tu tipo maybe envez de nothing da error directamente.
 --mimaybe:: b->(a->b) -> MiMaybe a -> b
--- se tendria que reescribir los tres códigos importantes lookUp, recLookUp pero con mimaybe, que devuelve error en vez de las cosas.
+-- se tendria que reescribir los tres códigos importantes lookUp, recLookUp pero con mimaybe, que devuelve error en vez de las cosas
+
+--mimaybe g f. g és la funció que gestiona els errors, f la que gestiona els casos normals
+mimaybe :: (String -> p) -> (t -> p) -> MiMaybe t -> p
+mimaybe g _ (Error s) = g s
+mimaybe _ f (OK x) = f x
+
+lookUpMi:: String -> Dicc -> MiMaybe String
+lookUpMi k EmptyBST = Error ("L'string " ++ k ++ " no es a l'arbre")
+lookUpMi k (NodeBST ai (x,y) ad)
+    | k == x      = OK y
+    | k < x       = lookUpMi k ai
+    | k > x       = lookUpMi k ad
+
+reclookupMi :: String -> Dicc -> IO () --ENCARA NO HO HEM DONAT AIXÒ xddd
+reclookupMi k d = mimaybe putStrLn (\x -> putStrLn (k ++ "->" ++ x)) (lookUpMi k d)
