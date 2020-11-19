@@ -1,0 +1,7 @@
+Estilo de examen:
+Hacer ejercicios como los de clase
+Dado este tipo de datos haz una instancia de alguna clase
+Dado datos algebraicos haz una funcion que haga tal.
+Define un tipo/dato algebraico bla bla bla.
+Obviamente tenemos que saber usar las listas a tope, ya que las necesitas todo el rato
+

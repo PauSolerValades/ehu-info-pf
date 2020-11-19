@@ -255,7 +255,7 @@ inordre (NodoN x ts) = partir(fst (n ts)) ++ x:partir(snd (n ts))
 inorden::ArbN a -> [a]
 inorden = foldt f
     where
-        --f:: a -> [[a]] -> [a]
+        f:: a -> [[a]] -> [a]
         f r [] = [r]
         f r zs = 
             let (f, l) = splitAt (length zs -1) zs 
