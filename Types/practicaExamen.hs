@@ -1,8 +1,8 @@
 data Comp a = Comp a [a]-- amb data l'únic que li vols dir a haskell és com ha de guardar les dades
 
-c1 = Comp 1.0 [-2.0, 2.0]
-c2 = Comp 0.4 [2.3, 8.6, 3.4]
-c3 = Comp 1.0 [-2.0, 2.0, 3.0]
+cc1 = Comp 1.0 [-2.0, 2.0]
+cc2 = Comp 0.4 [2.3, 8.6, 3.4]
+cc3 = Comp 1.0 [-2.0, 2.0, 3.0]
 
 instance Show a => Show (Comp a) where
     show a = mostrar a
@@ -35,6 +35,29 @@ instance Num a => Num (Comp a) where
     (Comp a as) - (Comp b bs) = (Comp a+b minLlista as bs)
     (Comp a as) * (Comp b bs) = (Comp a*b)
 -}
+
+data Complex = Complex Float Float
+
+c1 = Complex 4.0 3.0
+c2 = Complex (-1.0) (-6.0)
+
+instance Show Complex where
+    show (Complex r i) = show r ++ complex i
+            complex i
+                | signum i == 1.0  = "+" ++ show i ++ "i"
+                | signum i == 0.0  = ""
+                | signum i == -1.0 = "-" ++ show (abs i) ++ "i"
+
+instance Eq Complex where
+    Complex r1 i1 == Complex r2 i2 = r1 == r2 && i1 == i2
+
+instance Num Complex where
+    Complex r1 i1 + Complex r2 i2 = Complex (r1+r2) (i1+i2)
+    Complex r1 i1 - Complex r2 i2 = Complex (r1-r2) (i1-i2)
+    Complex r1 i1 * Complex r2 i2 = Complex (r1*r2 - i1*i2) (r1*i2+r2*i1)
+    abs (Complex r i) = Complex (sqrt(r*r + i*i)) 0.0
+    signum Complex =
+
 
 data Vector a = Vector [a] | Matriz [Vector a]
 
@@ -164,11 +187,17 @@ createNat i = if i==0 then addSuc Zero else addSuc (createNat (i-1))
 addSuc :: Nat -> Nat
 addSuc = Suc
 
-{-
-createNatInt::Int -> Nat
-createNatInt i = if i==0 then addSuc Zero else addSuc (createNatInt (i-1))
--}
+data N1 a = N1 a a
 
+newtype N2 a = N2 (a, a)
+
+type NS1 = N1 String
+type NS2 = N2 String
+
+x = N1 1 1
+y = N2 (1,1)
+xs = N1 "a" "a"
+ys = N1 "a" "a"
 
 {-
 --igualdad no miqueta matematica
