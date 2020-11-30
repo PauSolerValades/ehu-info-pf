@@ -1,3 +1,5 @@
+import Data.Char (digitToInt)
+
 --fibonacci NO eficiente
 fib::Integer -> Integer
 fib 0 = 0
@@ -36,7 +38,7 @@ digitos = reverse . map (`mod` 10) .  takeWhile (/=0) . iterate (`div` 10)
 primos = criba [2..]
 criba (p : ns) = p : criba (filter ((/= 0).(`mod`p)) ns)
 
--- take 100 (filter ((==7).(`mod` 10)) primos)
+-- take 100 (filter ((==7).(`mod` 10)) primos) --los 100 primeros primos que acaban en 7
 -- (filter ((==7).(`mod` 10)) primos) !! 99
 
 
@@ -53,6 +55,43 @@ unfold:: (Show a1, Eq a2, Num a2) => a2 -> Arbol a1 -> Arbol String
 unfold _ (Hoja r) = Hoja (show r)
 unfold 0 (Nodo ai ad) = Hoja " "
 unfold n (Nodo ai ad) = Nodo (unfold (n-1) ai)  (unfold (n-1) ad)
+
+
+--con repeat sacar [1,3,1,3,1,3,...] concat(repeat [1,3])
+
+--ISBN www.isbn-check.com
+{-
+Sea i un ISBN correcto. 978-18-6197271-2. pasamos a numero
+9781861972712
+
+9·1 = 9
+7·3 = 21
+8·1 = 8
+1·3 = 3
+8·1 = 8
+6·3 = 18
+
+
+la suma da 118 =s
+
+si m=(s%10==0), el 13ésimo dígito del ISBN debe ser cero.
+En caso contrario, el 13ésimo dígito del ISBN debe ser 10-m
+-}
+
+
+isISBN::String->Bool
+isISBN s = correctLength && correctFormula
+    where
+        isbnStr = filter (/='-') s
+        correctLength = if length isbnStr == 13 then True else False
+        digits = map digitToInt isbnStr
+        infinite = concat (repeat [1,3])
+        suma = sum( zipWith (*) digits infinite )
+        m = mod suma 10
+        correctFormula = if m == 0 then True 
+                         else (mod suma 10 == (suma-m))
+        
+--usar filter, length, map, zipWith, init, last, [1,3,1,3,1,3,...]
 
 -- Números de Hamming               
 hamming :: [Integer] 
