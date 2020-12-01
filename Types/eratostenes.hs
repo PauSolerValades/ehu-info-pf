@@ -21,6 +21,17 @@ fibE n = fst (fibPar n)
 --Ejercicio A MANO: CÓMO SE EVALUA fibE 3. (ta a la llibreta diari i eso.)
 --EJERCICIO de evaluación o algo
 
+--EJERCICIO: iterate sacar fibonacci
+
+fibIterate::Int->Integer
+fibIterate n = fst (last (take (n+1) fibList))
+    where
+        fibList = iterate (\(x,y)->(y,x+y)) (0,1)
+
+fibList::[Integer]
+fibList = map fst (iterate (\(x,y)->(y,x+y)) (0,1))
+
+
 --inversa ineficiente. tiene que hacerla recursión y tiene que volver otra vez.
 inversa [] = []
 inversa (x:xs) = inversa xs ++ [x]
@@ -78,18 +89,17 @@ si m=(s%10==0), el 13ésimo dígito del ISBN debe ser cero.
 En caso contrario, el 13ésimo dígito del ISBN debe ser 10-m
 -}
 
-
 isISBN::String->Bool
 isISBN s = correctLength && correctFormula
     where
         isbnStr = filter (/='-') s
-        correctLength = if length isbnStr == 13 then True else False
+        correctLength = length isbnStr == 13
         digits = map digitToInt isbnStr
-        infinite = concat (repeat [1,3])
-        suma = sum( zipWith (*) digits infinite )
+        suma = sum (zipWith (*) digits (cycle [1,3]))
         m = mod suma 10
-        correctFormula = if m == 0 then True 
-                         else (mod suma 10 == (suma-m))
+        lastDigit = last digits
+        correctFormula = if m == 0 then lastDigit == 0 
+                         else lastDigit == 10-m
         
 --usar filter, length, map, zipWith, init, last, [1,3,1,3,1,3,...]
 
@@ -114,3 +124,15 @@ hamming = 1: fundir3 (map (2*) hamming)
 16244249195502759967226308067328000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 (15.08 secs, 9,476,121,264 bytes)
 -}
+
+--Ejercicio: Dada una cantidad c i un %x de interés anual, generar la lista
+--infinita usando iterate de cantidades en que se convierte c cada año.
+--Usar esa lista para calcular, dados c, %x i una cantidad objetivo o,
+-- en cuantos años la cantidad será menor o igual que o
+interes::Float->Float->[Float]
+interes c x = iterate ((1+x)*) c
+--(\k->k+(x*k/100))
+
+numAnys::Float->Float->Float->Int
+numAnys c x o = length (takeWhile (<= o) (interes c x))
+--si hi poses un filter evidentment et petarà a la cara ja que no acbara mai de flirtrar la llista.
