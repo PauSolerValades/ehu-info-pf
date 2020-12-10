@@ -36,8 +36,9 @@ inMayusDo = --equivalent a inMayus', pero aquí s'enten
         putChar '\n'
         -- c' <- getChar --esto peta porque qué vas a hacer con la última cosa si no la recoge nadie
 
+
 miGetLine:: IO String  
--- lee el string de entrada hasta '\n'
+-- lee el string de entrada hasta '\n'. es una recursion con un parámetro implicito, el input
 miGetLine =
     do  
     c <- getChar
@@ -75,8 +76,8 @@ pedirComprobar p = do
 
 leerEnt :: IO Int
 leerEnt =  do
-               e <- getLine
-               return (read e)
+        e <- getLine
+        return (read e)
 
 -- Programa que lee una lista de enteros (escrita como lista):
 
@@ -96,9 +97,31 @@ mapLisEnt f  = do
 -- EJERCICIO: Programa que lee enteros (uno en cada línea) y los devuelve en una lista.
 ---------------------------------------------------------------------------
 
+addIntList :: IO [Int]
+addIntList = do
+        x <- getLine
+        if x == "" then return [] --oleee la llista buidaaaa
+                   else do
+                           xs <- addIntList
+                           return((read x :: Int):xs) -- el tipatje de l'int és redundant amb tipatge de la funció.
+        
+
 ----------------------------------------------------------------------------
 -- EJERCICIO: Programa que lee enteros (uno en cada l�nea) e imprime la suma de todos ellos.
 ---------------------------------------------------------------------------
+
+--la cosa està en que, si has de fer servir comandes d'entrada i sortida, ha d'estar dins d'un do. En cas que no hi sigui, doncs no anirà!
+addIntListSum :: IO ()
+addIntListSum = do
+        l <- addIntList
+        print (sum l)
+
+--se puede poner un let para no calcular dos veces.
+addIntListSumRet :: IO Int
+addIntListSum = do
+        l <- addIntList
+        print (sum l)
+        return (sumList) --para que devuelva un entero como resultado pues tienes que poner el return, sinó el tipo es IO ().
 
 -- Programas que tratan con ficheros de entrada/salida
 -- "C:/Users/..../Desktop/entrada.txt"
