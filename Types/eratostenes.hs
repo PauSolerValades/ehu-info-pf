@@ -6,8 +6,6 @@ fib 0 = 0
 fib 1 = 1
 fib n = fib (n-1) + fib (n-2)
 
-first (a,b) = a
-
 --fibonacci SÍ eficiente
 fibE::Integer -> Integer
 fibE n = fst (fibPar n)
@@ -18,8 +16,19 @@ fibE n = fst (fibPar n)
               let (a,b) = fibPar (n-1)
                   -- a = fib (n-1), b = fib n => a+b = fib n+1
               in (b, a+b)
---Ejercicio A MANO: CÓMO SE EVALUA fibE 3. (ta a la llibreta diari i eso.)
---EJERCICIO de evaluación o algo
+
+--Ejercicio: CÓMO SE EVALUA fibE 3.
+{-
+fst(fibPar 3)
+fst((b,a+b) where (a,b) = fibPar 2)
+fst((b,a+b) where (a,b) = (b1, b1+a1) where (a1, b1) = fibPar 1)
+fst((b,a+b) where (a,b) = (b1, b1+a1) where (a1, b1) = (b2, b2+a2) where (a2, b2) = fibPar 0))
+fst((b,a+b) where (a,b) = (b1, b1+a1) where (a1, b1) = (b2, b2+a2) where (a2, b2) = (0,1))))
+fst((b,a+b) where (a,b) = (b1, b1+a1) where (a1, b1) = (1, 1))
+fst((b,a+b) where (a,b) = (1, 2))
+fst((2,3))
+2
+-}
 
 --EJERCICIO: iterate sacar fibonacci
 
@@ -37,8 +46,8 @@ inversa [] = []
 inversa (x:xs) = inversa xs ++ [x]
 
 --inversa si efinente (recursiva de cola)
-inversaE s = invConc [] s
-    where
+inversaE = invConc []
+    whereS
           invConc t [] = t
           invConc t (x:xs) = invConc (x:t) xs
 

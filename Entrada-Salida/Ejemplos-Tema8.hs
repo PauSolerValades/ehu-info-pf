@@ -121,7 +121,7 @@ addIntListSumRet :: IO Int
 addIntListSum = do
         l <- addIntList
         print (sum l)
-        return (sumList) --para que devuelva un entero como resultado pues tienes que poner el return, sinó el tipo es IO ().
+        return (sumList) --para que devuelva un entero como resultado pues tienes que poner el return, sinó el tipo es IO () es decir: tupla vacía en Entrada-salida.
 
 -- Programas que tratan con ficheros de entrada/salida
 -- "C:/Users/..../Desktop/entrada.txt"

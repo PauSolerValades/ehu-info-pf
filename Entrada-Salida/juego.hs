@@ -13,7 +13,7 @@ juego clave =
 limpiarPantalla :: IO ()  
 limpiarPantalla = putStr ['\n' | i<-[1..200]]
 
---jugar :: Int -> Int -> IO ()  
+jugar :: Int -> Int -> IO ()  
 -- gestiona el juego del jugador 2
 jugar clave n = 
   if not (elem n [1..100]) 
@@ -41,7 +41,7 @@ pedirNuevoNum n clave =
 --Último ejercicio :( Cambiar el programa para que responda: 
 -- "adivinaste que era el" ++ show n ++ "en" ++ (show k) ++ "intentos"
 -- Es decir, cambiar los parametros de manera que pueda displayear los intentos.
-
+{-
 juegoIntentos:: Int -> IO ()  
 -- Comprueba que la clave està entre 1 y 100.
 -- En caso afirmativo, inicia el juego y lo gestiona
@@ -54,13 +54,15 @@ juegoIntentos clave =
             n <- getLine
             jugarIntentos clave (read n) 0 --read convierte al tipo que toca. Lo ingfere haskell en lo que él cree pero como se ve en el otro fichero, le puedes forzar a intetnar castear a otro tipo
 
-jugarIntentos :: Int -> Int -> Int -> IO ()  
+--jugarIntentos :: Int -> Int -> Int -> IO ()  
 -- gestiona el juego del jugador 2
 jugarIntentos clave n k = 
   if not (elem n [1..100]) 
   then putStrLn "Debe estar entre 1 y 100"
     else if n == clave 
-         then putStrLn ("Adivinaste que era el" ++ show n ++ "en" ++ (show k) ++ "intentos")   
+         then putStrLn ("Adivinaste que era el " ++ show n ++ " en " ++ (show k) ++ " intentos")   
          else do
               n' <- pedirNuevoNum n clave 
               jugarIntentos clave n' (k+1)
+              
+-}
